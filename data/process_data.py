@@ -6,9 +6,8 @@ from sqlalchemy import create_engine
 def load_data(messages_filepath, categories_filepath):
     messages = pd.read_csv(messages_filepath)
     categories = pd.read_csv(categories_filepath)
-    df = messages.merge(categories, left_on=['id'], right_on=['id'], how='left')
+    df = messages.merge(categories, on = 'id')
     return df
-
 
 # clean categories and merge to messages
 def clean_data(df):
@@ -23,17 +22,18 @@ def clean_data(df):
         # convert column from string to numeric
         categories[column] = categories[column].astype(int)
     # drop the original categories column from `df`
-    df.drop('categories', axis=1, inplace=True)
+    df = df.drop('categories', axis=1)
     df = pd.concat([df, categories], axis=1)
     # drop duplicates
-    df = df.drop(df[df.duplicated(['message'])].index)
+    df = df.drop_duplicates()
+    df = pd.concat([df,pd.get_dummies(df['genre'])],axis=1)
+    df = df.drop(['genre','social'],axis=1)
 
-    df = df[df['related'] != 2]
     return df
 
 def save_data(df, database_filename):
     engine = create_engine('sqlite:///{}.db'.format(database_filename))
-    df.to_sql('disaster', engine, index=False)
+    df.to_sql('disaster', engine, index=False, if_exists='replace')
 
 def main():
     if len(sys.argv) == 4:
