@@ -7,16 +7,14 @@ The three major aspects of this project is as follows:
 * Flask web-app displaying analysis from data
 
 Whilst building the app, the RandomForestClassifier produced results:
-----------------------------------------------------------------------
-Average precision: 0.9144378316164589
-Average recall: 0.9304562902526378
-Average f_score: 0.9095078645975319
+* Average precision: 0.9144378316164589
+* Average recall: 0.9304562902526378
+* Average f_score: 0.9095078645975319
 
 Whilst building the app, the AdaBoostClassifier produced results:
----------------------------------------------------------------------
-Average precision: 0.9042953044710732
-Average recall: 0.9284767839647945
-Average f_score: 0.9096473360388433
+* Average precision: 0.9042953044710732
+* Average recall: 0.9284767839647945
+* Average f_score: 0.9096473360388433
 
 Related Blog
 ----------------------
@@ -71,6 +69,25 @@ INSTALLATION
 * Follow the information printed in your environment to the site. Usually 0.0.0.0:3001 or localhost:3001
 
 
+### Rerun Scripts
+1. Run the following commands in the project's root directory to set up your database and model.
+
+    - To run ETL pipeline that cleans data and stores in database
+      -  `python3 data/process_data.py`
+      -  `python3 data/etl_pipeline.py`
+      -  `python3 data/figures.py`
+
+
+    - To run ML pipeline that trains classifier and saves
+      - `python3 model/ml_pipeline.py`
+      - `python3 model/train_ml_pipeline.py`
+2. Run the following command in the app's directory to run your web app.
+    `python3 app/run.py`
+
+3. Go to http://0.0.0.0:3001/
+
+
+
 Extending this
 -------------------------
 
@@ -98,37 +115,3 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Disaster Response Pipeline Project
-
-### Instructions:
-1. Run the following commands in the project's root directory to set up your database and model.
-
-    - To run ETL pipeline that cleans data and stores in database
-        `python data/process_data.py data/disaster_messages.csv data/disaster_categories.csv data/DisasterResponse.db`
-    - To run ML pipeline that trains classifier and saves
-        `python models/train_classifier.py data/DisasterResponse.db models/classifier.pkl`
-
-2. Run the following command in the app's directory to run your web app.
-    `python run.py`
-
-3. Go to http://0.0.0.0:3001/
