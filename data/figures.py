@@ -1,3 +1,4 @@
+#Import modules
 import pandas as pd
 import plotly.colors
 import plotly.graph_objs as go
@@ -6,29 +7,23 @@ import os
 
 
 def return_figures():
-    print(".......------------...........------------")
-    print(os.getcwd())
+    """Creates pretty plotly graphs
+
+    Args:
+        None
+
+    Returns:
+        Figures => List of dictionary of pretty plotly graphs
+
+    """
+    #loading the figures db into a df
     engine = create_engine("sqlite:///../data/figures.db")
-    print(engine)
     df = pd.read_sql_table('disaster', engine)
-    print(df.columns)
 
-
-
-
-
-
-# extract data needed for visuals
-    # TODO: Below is an example - modify to extract data for your own visuals
-
-    # create visuals
-    # TODO: Below is an example - modify to create your own visuals
+    #list of dictionary of graph plots
     graph_one = []
     genre_counts = df.groupby('genre').count()['message'].sort_values(ascending = False)
-
     genre_counts = pd.DataFrame({'genre':genre_counts.index, 'count':genre_counts.values})
-
-
     for genre in genre_counts['genre']:
         x_val = genre_counts[genre_counts['genre'] == genre]['genre'].tolist()
         y_val = genre_counts[genre_counts['genre'] == genre]['count'].tolist()
@@ -46,19 +41,17 @@ def return_figures():
                       autotick=True),
                     yaxis = dict(title = 'Number of Messages'),
                     )
-
+    #Function to count the number of occurences of each category
     def count_col():
-
         c = df.drop(df.columns[:4], axis=1)
         print(c.columns)
         c['related'] = c['related'].astype('str').str.replace('2', '1')
         c['related'] = c['related'].astype('int')
         count = c.sum().sort_values(ascending = False)
         return count
-    print(count_col())
 
 
-
+    #Second Graph
     graph_two = []
     pop_cols = count_col().head(10)
     pop_cols_df = pd.DataFrame({'category':pop_cols.index, 'count':pop_cols.values})
@@ -82,7 +75,7 @@ def return_figures():
 
 
 
-
+    #Third graph
     graph_three = []
     unpop_cols = count_col().tail(10)
     unpop_cols_df = pd.DataFrame({'category':unpop_cols.index, 'count':unpop_cols.values})
@@ -107,7 +100,7 @@ def return_figures():
                     )
 
 
-
+    #Appending graphs to a list of figures
     figures = []
     figures.append(dict(data=graph_one, layout=layout_one))
     figures.append(dict(data=graph_two, layout=layout_two))
@@ -115,5 +108,3 @@ def return_figures():
 
 
     return figures
-
-print(return_figures())

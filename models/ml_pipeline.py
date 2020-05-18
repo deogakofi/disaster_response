@@ -24,10 +24,17 @@ from sklearn.metrics import confusion_matrix
 import pickle
 
 
-
-
 def load_data(engine_name, table_name):
-    # load data from database
+    """load data from database
+
+    Args:
+        engine_name => Name of db engine to load
+        table_name => name of db table to read
+    Returns:
+        X => explanatory variable
+        Y => predictive variable
+
+    """
     engine = create_engine('sqlite:///../data/{}.db'.format(engine_name))
     df = pd.read_sql("SELECT * FROM {}".format(table_name), engine)
     X = df['message']
@@ -37,8 +44,17 @@ def load_data(engine_name, table_name):
     return X, Y
 
 
-
+# Tokenize text in a df series object
 def tokenize(df_series):
+    """Tokenizes a df text series
+
+    Args:
+        df text series object
+
+    Returns:
+        clean token list
+
+    """
     tokenizer = RegexpTokenizer(r'\w+')
     tokens = []
     for tok in df_series:
@@ -54,8 +70,16 @@ def tokenize(df_series):
 
     return clean_tokens
 
-
 def build_model(classifier):
+    """Build a multi-output classification model
+
+    Args:
+        classifier => type of multi-output classifier in format 'classifier()''
+
+    Returns:
+        pipeline => multi-output classifier pipeline
+
+    """
     pipeline = Pipeline(
         [('vect', CountVectorizer(tokenizer=tokenize)),
         ('tfidf', TfidfTransformer()),
@@ -65,8 +89,20 @@ def build_model(classifier):
     return pipeline
 
 
-
 def train_model(X, Y, model):
+    """Train multi-output classification model
+
+    Args:
+        X => explanatory variable
+        Y => predictive variable
+    Returns:
+        X_train => explanatory variable training set
+        y_train => predictive variable training set
+        X_test => explanatory variable test set
+        y_test => predictive variable training set
+        y_pred => X_test predictions from model variable training set
+        model => Model used in training
+    """
     X_train, X_test, y_train, y_test = train_test_split(X, Y)
     model_fit = model.fit(X_train.values, y_train.values)
     y_pred = model_fit.predict(X_test)
@@ -74,7 +110,16 @@ def train_model(X, Y, model):
 
     return X_train, X_test, y_train, y_test, y_pred, model
 
+
 def get_results(y_test, y_pred):
+    """Get precision, recall and f-score from trained multi-output model
+
+    Args:
+        y_pred => X_test predictions from model variable training set
+        y_test => predictive variable training set
+    Returns:
+        Results => DataFrame containing the precision, recall and fscore of each variable
+    """
     results = pd.DataFrame(columns=['category', 'precision', 'recall', 'f_score'])
     count = 0
     for category in y_test.columns:
@@ -93,6 +138,15 @@ def get_results(y_test, y_pred):
 
 
 def grid_search(model, X_train, y_train):
+    """Perform gridsearch using model
+
+    Args:
+        model => Model used in training
+        X_train => explanatory variable training set
+        y_train => predictive variable training set
+    Returns:
+        cv => Gridsearch cv object
+    """
 
     param = {
             'clf__estimator__n_estimators': [100, 200],
@@ -109,12 +163,37 @@ def grid_search(model, X_train, y_train):
     return cv
 
 def save_cv(cv_name, cv):
+    """Save gridsearch as pickle file
+
+    Args:
+        cv_name => name you want to call file of cross validation in format 'file.pickle'
+        cv => Gridsearch object returned from grid_search function
+    Returns:
+        None
+    """
     with open('../models/{}.pickle'.format(cv_name), 'wb') as f:
         pickle.dump(cv, f)
 
 def save_clf_results(results_name, results):
+    """Save classifier results as pickle file
+
+    Args:
+        results_name => name you want to call file of model prediction results in format 'file.pickle'
+        results => results df object returned from get_results function
+    Returns:
+        None
+    """
     with open('../models/{}.pickle'.format(results_name), 'wb') as f:
         pickle.dump(results, f)
+
 def save_model(model_name, model):
+    """Save modlel results as pickle file
+
+    Args:
+        model_name => name you want to call file of model prediction results in format 'file.pickle'
+        model => model object returned from get_results function
+    Returns:
+        None
+    """
     with open('../models/{}.pickle'.format(model_name), 'wb') as f:
         pickle.dump(model, f)

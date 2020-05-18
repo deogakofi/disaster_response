@@ -1,3 +1,4 @@
+#import libraries needed
 import json
 import plotly
 import pandas as pd
@@ -10,24 +11,30 @@ from sklearn.externals import joblib
 from sqlalchemy import create_engine
 import os
 from flask import Flask
-app = Flask(__name__)
 import sys
+#add database and model paths in the project folder to retrieve model, graphs and data
 sys.path.insert(0,'../data')
 sys.path.insert(0,'../models')
 print(sys.path)
 import figures as f
+#invoke app when script is run
+app = Flask(__name__)
 
 
 # load data
 engine = create_engine("sqlite:///../data/emergency.db")
 df = pd.read_sql_table('disaster', engine)
 
-df.head()
-
-
-
-
 def tokenize(text):
+    """Tokenizes a df text series
+
+    Args:
+        df text series object
+
+    Returns:
+        clean token list
+
+    """
     tokens = word_tokenize(text)
     lemmatizer = WordNetLemmatizer()
 
@@ -38,38 +45,46 @@ def tokenize(text):
 
     return clean_tokens
 
-
 # load model
 model = joblib.load("../models/model_rf_fit.pickle")
 
-
-
-
-
-# index webpage displays cool visuals and receives user input text for model
 @app.route('/')
 @app.route('/index')
 @app.route('/index.html')
 @app.route('/#')
-
 def index():
+    """displays cool visuals and receives user input text for model
+
+    Args:
+        None
+
+    Returns:
+        Plotly  list from data/figures.py and renders the index.html template
+
+    """
 
     figures = f.return_figures()
-
     # plot ids for the html id tag
     ids = ['figure-{}'.format(i) for i, _ in enumerate(figures)]
-
     # Convert the plotly figures to JSON for javascript in html template
     figuresJSON = json.dumps(figures, cls=plotly.utils.PlotlyJSONEncoder)
-
     return render_template('index.html',
                            ids=ids,
                            figuresJSON=figuresJSON)
 
-# web page that handles user query and displays model results
 @app.route('/go')
 @app.route('/go.html')
 def go():
+    """Web page that handles user query and displays model results
+
+    Args:
+        None
+
+    Returns:
+        query classificaiton results from 'model.pickle'
+        and renders the go.html template
+
+    """
     # save user input in query
     query = request.args.get('query', '')
 
@@ -83,7 +98,7 @@ def go():
         query=query,
         classification_result=classification_results
     )
-
+#Run the programme
 def main():
     app.run(host='0.0.0.0', port=3001, debug=True)
 

@@ -1,12 +1,14 @@
+<!--specify homepage url and update title of page-->
 {% extends "index.html" %}
 {% block title %}Results{% endblock %}
 
+<!--Message classifier container-->
 {% block message %}
     <hr />
     <h4 class="text-center">MESSAGE</h4>
     <p class="text-center"><i>{{query}}</i></p>
 {% endblock %}
-
+<!--Display message classifier results in list-->
 {% block content %}
     <h1 class="text-center">Result</h1>
         <ul class="list-group">

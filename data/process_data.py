@@ -3,7 +3,17 @@ import sys
 import pandas as pd
 from sqlalchemy import create_engine
 
+
 def load_data(messages_filepath, categories_filepath):
+    """Load data from csv files and merge both datasets on ID
+
+    Args:
+        messages_filepath => csv file for messages
+        categories_filepath => csv file for categories
+    Returns:
+        df => Dataframe messages and categories merged on ID
+
+    """
     messages = pd.read_csv(messages_filepath)
     categories = pd.read_csv(categories_filepath)
     df = messages.merge(categories, on = 'id')
@@ -11,6 +21,15 @@ def load_data(messages_filepath, categories_filepath):
 
 # clean categories and merge to messages
 def clean_data(df):
+    """Clean categories and merge to messages
+
+    Args:
+        df => DataFrame of merged categories and messages csv files
+
+    Returns:
+        df => Dataframe of cleaned categories and dropped duplicateds
+
+    """
     categories = pd.Series(df.categories).str.split(';', expand=True)
     row = categories.loc[0]
     category_colnames = row.apply(lambda x: x[:-2]).values
@@ -31,10 +50,21 @@ def clean_data(df):
 
     return df
 
+
 def save_data(df, database_filename):
+    """Save dataframe to sqlite engine
+
+    Args:
+        df => DataFrame of merged categories and messages csv files
+        database_filename => filename for db engine as string
+    Returns:
+        None
+
+    """
     engine = create_engine('sqlite:///{}.db'.format(database_filename))
     df.to_sql('disaster', engine, index=False, if_exists='replace')
 
+#execute the process data script
 def main():
     if len(sys.argv) == 4:
 
