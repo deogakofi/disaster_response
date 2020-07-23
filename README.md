@@ -7,14 +7,13 @@ The three major aspects of this project is as follows:
 * Flask web-app displaying analysis from data
 
 Whilst building the app, the RandomForestClassifier produced results:
-* Average precision: 0.9144378316164589
-* Average recall: 0.9304562902526378
-* Average f_score: 0.9095078645975319
+* **Average precision:** 0.9161571841990476
+* **Average recall:** 0.9312031222395322
+* **Average f_score:** 0.9105049019931754
 
 Whilst building the app, the AdaBoostClassifier produced results:
-* Average precision: 0.9042953044710732
-* Average recall: 0.9284767839647945
-* Average f_score: 0.9096473360388433
+* **Average recall:** 0.9282398856463709
+* **Average f_score:** 0.9096621267659827
 
 Related Blog
 ----------------------
@@ -64,7 +63,7 @@ INSTALLATION
 * Check python3 installed correctly using `python3 --version` and this should return python3 version
 * Install the requirements using `pip3 install -r requirements.txt`.
     * Make sure you use Python 3
-* `cd` to the location "../data/"
+* `cd` to the location "../app/"
 * Execute `python3 run.py`
 * Follow the information printed in your environment to the site. Usually 0.0.0.0:3001 or localhost:3001
 
