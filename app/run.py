@@ -13,10 +13,12 @@ import os
 from flask import Flask
 import sys
 #add database and model paths in the project folder to retrieve model, graphs and data
-sys.path.insert(0,'../data')
-sys.path.insert(0,'../models')
-print(sys.path)
-import figures as f
+from pathlib import Path
+two_up = Path(__file__).resolve().parents[1]
+two_up = str(two_up)
+sys.path.append(two_up)
+sys.path.append('../models')
+import data.figures as f
 #invoke app when script is run
 app = Flask(__name__)
 
@@ -46,7 +48,7 @@ def tokenize(text):
     return clean_tokens
 
 # load model
-model = joblib.load("../models/model_rf_fit.pickle")
+model = joblib.load("{}/models/model_rf_fit.pickle".format(two_up))
 
 @app.route('/')
 @app.route('/index')

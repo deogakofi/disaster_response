@@ -96,6 +96,7 @@ If you want to extend this work, here are a few places to start:
 * Rewriting code with dask so gridsearch debugging and compiling can be quicker
 * Include more graphs
 * Explore the effect of stopwords on precision
+* Use dummies data for related field instead of replacing 2 with 1
 
 
 
