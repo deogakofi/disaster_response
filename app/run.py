@@ -21,6 +21,8 @@ sys.path.append(two_up)
 
 sys.path.append('{}/models'.format(two_up))
 import data.figures as f
+import pickle
+print(pickle.format_version)
 #invoke app when script is run
 
 
@@ -50,7 +52,7 @@ def tokenize(text):
     return clean_tokens
 
 # load model
-model = joblib.load("{}/models/model_rf_fit.pickle".format(two_up))
+model = pickle.load(open("{}/models/model_rf_fit.pickle".format(two_up), 'rb'))
 
 @app.route('/')
 @app.route('/index')

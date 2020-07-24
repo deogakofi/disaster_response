@@ -12,7 +12,8 @@ two_up = str(two_up)
 sys.path.append(two_up)
 
 sys.path.append('{}/models'.format(two_up))
-
+import pickle
+print(pickle.format_version)
 def return_figures():
     """Creates pretty plotly graphs
 
@@ -51,7 +52,6 @@ def return_figures():
     #Function to count the number of occurences of each category
     def count_col():
         c = df.drop(df.columns[:4], axis=1)
-        print(c.columns)
         c['related'] = c['related'].astype('str').str.replace('2', '1')
         c['related'] = c['related'].astype('int')
         count = c.sum().sort_values(ascending = False)
