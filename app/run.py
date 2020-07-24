@@ -52,7 +52,9 @@ def tokenize(text):
     return clean_tokens
 
 # load model
-model = pickle.load(open("{}/models/model_rf_fit.pickle".format(two_up), 'rb'))
+with open("{}/models/model_rf_fit.pickle".format(two_up), 'rb') as pick:
+    model = pickle.load(pick)
+
 
 @app.route('/')
 @app.route('/index')
