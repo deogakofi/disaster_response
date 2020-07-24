@@ -4,7 +4,14 @@ import plotly.colors
 import plotly.graph_objs as go
 from sqlalchemy import create_engine
 import os
+import sys
+#add database and model paths in the project folder to retrieve model, graphs and data
+from pathlib import Path
+two_up = Path(__file__).resolve().parents[1]
+two_up = str(two_up)
+sys.path.append(two_up)
 
+sys.path.append('{}/models'.format(two_up))
 
 def return_figures():
     """Creates pretty plotly graphs
@@ -17,7 +24,7 @@ def return_figures():
 
     """
     #loading the figures db into a df
-    engine = create_engine("sqlite:///../data/figures.db")
+    engine = create_engine("sqlite:////{}/data/figures.db".format(two_up))
     df = pd.read_sql_table('disaster', engine)
 
     #list of dictionary of graph plots

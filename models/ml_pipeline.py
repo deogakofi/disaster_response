@@ -6,9 +6,7 @@ nltk.download('wordnet')
 from sqlalchemy import create_engine
 import pandas as pd
 from nltk.tokenize import word_tokenize, RegexpTokenizer
-from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
-nltk.download('stopwords')
 from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.model_selection import train_test_split

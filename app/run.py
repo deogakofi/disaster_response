@@ -1,4 +1,5 @@
 #import libraries needed
+from app import app
 import json
 import plotly
 import pandas as pd
@@ -17,14 +18,15 @@ from pathlib import Path
 two_up = Path(__file__).resolve().parents[1]
 two_up = str(two_up)
 sys.path.append(two_up)
-sys.path.append('../models')
+
+sys.path.append('{}/models'.format(two_up))
 import data.figures as f
 #invoke app when script is run
-app = Flask(__name__)
+
 
 
 # load data
-engine = create_engine("sqlite:///../data/emergency.db")
+engine = create_engine("sqlite:////{}/data/emergency.db".format(two_up))
 df = pd.read_sql_table('disaster', engine)
 
 def tokenize(text):
@@ -53,7 +55,6 @@ model = joblib.load("{}/models/model_rf_fit.pickle".format(two_up))
 @app.route('/')
 @app.route('/index')
 @app.route('/index.html')
-@app.route('/#')
 def index():
     """displays cool visuals and receives user input text for model
 
@@ -100,10 +101,3 @@ def go():
         query=query,
         classification_result=classification_results
     )
-#Run the programme
-def main():
-    app.run(host='0.0.0.0', port=3001, debug=True)
-
-
-if __name__ == '__main__':
-    main()
